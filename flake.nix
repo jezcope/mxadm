@@ -1,20 +1,14 @@
 {
   description = "virtual environments";
 
-  inputs.devshell.url = "github:numtide/devshell";
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  outputs = { self, flake-utils, devshell, nixpkgs }:
-    flake-utils.lib.eachDefaultSystem (system: {
-      devShell =
-        let pkgs = import nixpkgs {
-          inherit system;
-
-          overlays = [ devshell.overlay ];
+  outputs = { self, flake-utils, nixpkgs, ... }@inputs:
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        devShell = pkgs.mkShell {
+          buildInputs = with pkgs; [ cargo rustc pkgconfig openssl.dev ];
         };
-        in
-        pkgs.devshell.mkShell {
-          imports = [ (pkgs.devshell.importTOML ./devshell.toml) ];
-        };
-    });
+      });
 }
