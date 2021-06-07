@@ -14,6 +14,8 @@ TODO: policy on maintenance and contributions
 - [ ] Handle multiple accounts on different homeservers
 - [ ] Add room alias
 - [ ] Remove room alias
+- [ ] List rooms
+- [ ] Filter room list in various ways (esp. Spaces!)
 - [ ] Tombstone room
 - [ ] Upgrade room
 
