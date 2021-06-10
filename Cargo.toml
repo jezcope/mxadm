@@ -7,3 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = "2.33.3"
+rpassword = "5.0"
+matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
+tokio = { version = "*", features = ["full"] }
+serde = "1.0"
+serde-lexpr = "0.1.0"

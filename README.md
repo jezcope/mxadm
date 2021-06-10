@@ -11,11 +11,12 @@ TODO: policy on maintenance and contributions
 - [ ] Login and store session info
 - [ ] Log out
 - [ ] Show login status
-- [ ] Handle multiple accounts on different homeservers
+- [ ] Tombstone room
 - [ ] Add room alias
 - [ ] Remove room alias
 - [ ] List rooms
 - [ ] Filter room list in various ways (esp. Spaces!)
-- [ ] Tombstone room
+- [ ] Handle multiple accounts on different homeservers
 - [ ] Upgrade room
+- [ ] Make it easier to do workflows like "invite mjolnir -> op mjolnir" in multiple rooms
 
