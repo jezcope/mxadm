@@ -13,12 +13,7 @@ use clap::SubCommand;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let matches = app_from_crate!()
-        .args_from_usage(
-            "-c, --config=[FILE] 'Sets custom config file'
-             -v, --verbose       'Prints more details when running'
-             -T, --token=[TOKEN] 'Specifies token for authentication'",
-        )
+    let app = app_from_crate!()
         .subcommand(
             SubCommand::with_name("login")
                 .about("authenticates and saves the session details")
