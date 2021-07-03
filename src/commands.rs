@@ -104,3 +104,13 @@ pub async fn add_alias(room_id: &str, alias: &str) -> CommandResult {
 
     Ok(())
 }
+
+pub async fn del_alias(alias: &str) -> CommandResult {
+    let alias_id = RoomAliasId::try_from(alias)?;
+    let client = restore_session().await?;
+
+    let request = alias::delete_alias::Request::new(&alias_id);
+    client.send(request, None).await?;
+
+    Ok(())
+}

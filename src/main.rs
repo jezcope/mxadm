@@ -32,6 +32,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                      <alias>    'The new alias to add'",
                 ),
         )
+        .subcommand(
+            SubCommand::with_name("del-alias")
+                .about("deletes an existing alias")
+                .args_from_usage("<alias>    'The alias to delete'"),
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -44,6 +49,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 submatches.value_of("alias").unwrap(),
             )
             .await?
+        }
+        ("del-alias", Some(submatches)) => {
+            commands::del_alias(submatches.value_of("alias").unwrap()).await?
         }
         ("", None) => eprintln!("No subcommand given"),
         (c, _) => {
