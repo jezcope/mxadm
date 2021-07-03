@@ -72,7 +72,7 @@ pub async fn list_rooms() -> CommandResult {
     let client = restore_session().await?;
 
     println!("Syncing...");
-    // client.sync_once(SyncSettings::default()).await?;
+    client.sync_once(SyncSettings::default()).await?;
     println!(" ...done");
 
     println!("Joined rooms:");
@@ -95,6 +95,8 @@ pub async fn add_alias(room_id: &str, alias: &str) -> CommandResult {
     let alias_id = RoomAliasId::try_from(alias)?;
     let client = restore_session().await?;
 
+    let request = alias::create_alias::Request::new(&alias_id, &room_id);
+    client.send(request, None).await?;
 
-    todo!()
+    Ok(())
 }
