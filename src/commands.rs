@@ -74,10 +74,15 @@ pub async fn status() -> CommandResult {
 
 pub async fn list_rooms() -> CommandResult {
     let client = restore_session().await?;
+    let mut sync_settings = SyncSettings::new();
+    if let Some(token) = client.sync_token().await {
+        sync_settings = sync_settings.token(token);
+    }
 
-    println!("Syncing...");
-    client.sync_once(SyncSettings::default()).await?;
-    println!(" ...done");
+    print!("Syncing...");
+    io::stderr().flush().unwrap();
+    client.sync_once(sync_settings).await?;
+    println!(" done");
 
     println!("Joined rooms:");
     println!(room_fmt!(), "Name", "Main alias", "Room ID");
