@@ -2,14 +2,17 @@
 extern crate clap;
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate anyhow;
 
 mod commands;
 mod session;
 
+use anyhow::Result;
 use clap::{App, SubCommand};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<()> {
     let matches = App::new(crate_name!())
         .version(crate_version!())
         .about(crate_description!())
@@ -55,7 +58,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ("del-alias", Some(submatches)) => {
             commands::del_alias(submatches.value_of("alias").unwrap()).await?
         }
-        ("", None) => eprintln!("No subcommand given"),
+        ("", None) => bail!("No subcommand given"),
         (c, _) => {
             todo!("Subcommand '{}' not implemented yet!", c);
         }

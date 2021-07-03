@@ -1,3 +1,4 @@
+use anyhow::{Context, Result};
 use matrix_sdk::{
     ruma::{api::client::r0::alias, RoomAliasId, RoomId, UserId},
     Client, Session, SyncSettings,
@@ -8,7 +9,7 @@ use std::io::{self, Write};
 
 use crate::session::{build_client_config, restore_session, save_session};
 
-type CommandResult = Result<(), Box<dyn std::error::Error>>;
+type CommandResult = Result<()>;
 
 macro_rules! room_fmt {
     () => {
@@ -18,7 +19,8 @@ macro_rules! room_fmt {
 
 pub async fn login(username: Option<&str>) -> CommandResult {
     let user_id = match username {
-        Some(s) => UserId::try_from(s)?,
+        Some(s) => UserId::try_from(s)
+            .with_context(|| format!("Failed to parse '{}' as User ID", username))?,
         None => {
             let mut s = String::new();
 
@@ -27,17 +29,20 @@ pub async fn login(username: Option<&str>) -> CommandResult {
 
             let stdin = io::stdin();
             stdin.read_line(&mut s)?;
-            UserId::try_from(s.trim_end())?
+            UserId::try_from(s.trim_end())
+                .with_context(|| format!("Failed to parse '{}' as User ID", s))?
         }
     };
 
     let password = prompt_password_stderr("Password: ")?;
 
-    let client =
-        Client::new_from_user_id_with_config(user_id.clone(), build_client_config()).await?;
+    let client = Client::new_from_user_id_with_config(user_id.clone(), build_client_config())
+        .await
+        .context("Unable to initialise client")?;
     let response = client
         .login(user_id.localpart(), &password, None, Some("mxadm"))
-        .await?;
+        .await
+        .context("Login failed")?;
     println!(
         "{} logged in? {}",
         client.homeserver().await,
@@ -81,7 +86,10 @@ pub async fn list_rooms() -> CommandResult {
 
     print!("Syncing...");
     io::stderr().flush().unwrap();
-    client.sync_once(sync_settings).await?;
+    client
+        .sync_once(sync_settings)
+        .await
+        .context("Sync failed")?;
     println!(" done");
 
     println!("Joined rooms:");
@@ -100,8 +108,10 @@ pub async fn list_rooms() -> CommandResult {
 }
 
 pub async fn add_alias(room_id: &str, alias: &str) -> CommandResult {
-    let room_id = RoomId::try_from(room_id)?;
-    let alias_id = RoomAliasId::try_from(alias)?;
+    let room_id = RoomId::try_from(room_id)
+        .with_context(|| format!("Failed to parse '{}' as room ID", room_id))?;
+    let alias_id = RoomAliasId::try_from(alias)
+        .with_context(|| format!("Failed to parse '{}' as room alias", alias))?;
     let client = restore_session().await?;
 
     let request = alias::create_alias::Request::new(&alias_id, &room_id);
@@ -111,11 +121,15 @@ pub async fn add_alias(room_id: &str, alias: &str) -> CommandResult {
 }
 
 pub async fn del_alias(alias: &str) -> CommandResult {
-    let alias_id = RoomAliasId::try_from(alias)?;
+    let alias_id = RoomAliasId::try_from(alias)
+        .with_context(|| format!("Failed to parse '{}' as room alias", alias))?;
     let client = restore_session().await?;
 
     let request = alias::delete_alias::Request::new(&alias_id);
-    client.send(request, None).await?;
+    client
+        .send(request, None)
+        .await
+        .with_context(|| format!("Failed to delete alias '{}'", alias))?;
 
     Ok(())
 }
