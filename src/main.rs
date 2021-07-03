@@ -1,8 +1,10 @@
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate lazy_static;
 
 mod commands;
-mod util;
+mod session;
 
 use clap::{App, SubCommand};
 

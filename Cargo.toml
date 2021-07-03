@@ -13,3 +13,5 @@ matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
 tokio = { version = "*", features = ["full"] }
 serde = "1.0"
 serde-lexpr = "0.1.0"
+directories = "3.0"
+lazy_static = "1.4.0"

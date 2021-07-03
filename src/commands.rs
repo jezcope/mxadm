@@ -6,7 +6,7 @@ use rpassword::prompt_password_stderr;
 use std::convert::TryFrom;
 use std::io::{self, Write};
 
-use crate::util::{build_client_config, restore_session, save_session};
+use crate::session::{build_client_config, restore_session, save_session};
 
 type CommandResult = Result<(), Box<dyn std::error::Error>>;
 
