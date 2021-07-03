@@ -8,15 +8,15 @@ TODO: policy on maintenance and contributions
 
 ## TODO
 
-- [ ] Login and store session info
+- [x] Login and store session info
 - [ ] Log out
-- [ ] Show login status
+- [x] Show login status
 - [ ] Tombstone room
 - [ ] Add room alias
 - [ ] Remove room alias
-- [ ] List rooms
+- [x] List rooms
 - [ ] Filter room list in various ways (esp. Spaces!)
 - [ ] Handle multiple accounts on different homeservers
 - [ ] Upgrade room
-- [ ] Make it easier to do workflows like "invite mjolnir -> op mjolnir" in multiple rooms
+- [ ] Make it easier to script workflows like "configure ACL permissions -> invite mjolnir -> op mjolnir" in multiple rooms
 
