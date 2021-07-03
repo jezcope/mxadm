@@ -19,8 +19,9 @@ macro_rules! room_fmt {
 
 pub async fn login(username: Option<&str>) -> CommandResult {
     let user_id = match username {
-        Some(s) => UserId::try_from(s)
-            .with_context(|| format!("Failed to parse '{}' as User ID", username))?,
+        Some(s) => {
+            UserId::try_from(s).with_context(|| format!("Failed to parse '{}' as User ID", s))?
+        }
         None => {
             let mut s = String::new();
 

@@ -9,13 +9,11 @@ mod commands;
 mod session;
 
 use anyhow::Result;
-use clap::{App, SubCommand};
+use clap::SubCommand;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let matches = App::new(crate_name!())
-        .version(crate_version!())
-        .about(crate_description!())
+    let matches = app_from_crate!()
         .args_from_usage(
             "-c, --config=[FILE] 'Sets custom config file'
              -v, --verbose       'Prints more details when running'
@@ -33,14 +31,14 @@ async fn main() -> Result<()> {
             SubCommand::with_name("add-alias")
                 .about("adds an alias to a room")
                 .args_from_usage(
-                    "<room_id>  'The ID of the room to alias'
-                     <alias>    'The new alias to add'",
+                    "<ROOM_ID>  'The ID of the room to alias'
+                     <ALIAS>    'The new alias to add'",
                 ),
         )
         .subcommand(
             SubCommand::with_name("del-alias")
                 .about("deletes an existing alias")
-                .args_from_usage("<alias>    'The alias to delete'"),
+                .args_from_usage("<ALIAS>    'The alias to delete'"),
         )
         .get_matches();
 
@@ -50,13 +48,13 @@ async fn main() -> Result<()> {
         ("list-rooms", Some(_)) => commands::list_rooms().await?,
         ("add-alias", Some(submatches)) => {
             commands::add_alias(
-                submatches.value_of("room_id").unwrap(),
-                submatches.value_of("alias").unwrap(),
+                submatches.value_of("ROOM_ID").unwrap(),
+                submatches.value_of("ALIAS").unwrap(),
             )
             .await?
         }
         ("del-alias", Some(submatches)) => {
-            commands::del_alias(submatches.value_of("alias").unwrap()).await?
+            commands::del_alias(submatches.value_of("ALIAS").unwrap()).await?
         }
         ("", None) => bail!("No subcommand given"),
         (c, _) => {
