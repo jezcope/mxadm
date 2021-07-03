@@ -2,6 +2,7 @@
 extern crate clap;
 
 mod commands;
+mod util;
 
 use clap::{App, SubCommand};
 
@@ -23,15 +24,31 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .subcommand(SubCommand::with_name("logout").about("ends the current session"))
         .subcommand(SubCommand::with_name("status").about("displays current session status"))
         .subcommand(SubCommand::with_name("list-rooms").about("lists rooms available to the user"))
+        .subcommand(
+            SubCommand::with_name("add-alias")
+                .about("adds an alias to a room")
+                .args_from_usage(
+                    "<room_id>  'The ID of the room to alias'
+                     <alias>    'The new alias to add'",
+                ),
+        )
         .get_matches();
 
     match matches.subcommand() {
-        ("login", Some(login_matches)) => commands::login(login_matches.value_of("user")).await?,
-        ("logout", Some(_)) => println!("logging out..."),
+        ("login", Some(submatches)) => commands::login(submatches.value_of("user")).await?,
         ("status", Some(_)) => commands::status().await?,
-        ("list-rooms", Some(_)) => println!("listing rooms..."),
-        ("", None) => println!("No subcommand given"),
-        _ => unreachable!(),
+        ("list-rooms", Some(_)) => commands::list_rooms().await?,
+        ("add-alias", Some(submatches)) => {
+            commands::add_alias(
+                submatches.value_of("room_id").unwrap(),
+                submatches.value_of("alias").unwrap(),
+            )
+            .await?
+        }
+        ("", None) => eprintln!("No subcommand given"),
+        (c, _) => {
+            todo!("Subcommand '{}' not implemented yet!", c);
+        }
     }
 
     Ok(())
