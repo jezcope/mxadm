@@ -8,7 +8,7 @@
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
         devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [ cargo rustc pkgconfig openssl.dev ];
+          buildInputs = with pkgs; [ cargo rustc rustfmt pkgconfig openssl.dev ];
         };
       });
 }
