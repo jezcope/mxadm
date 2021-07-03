@@ -10,7 +10,11 @@ use crate::util::{build_client_config, restore_session, save_session};
 
 type CommandResult = Result<(), Box<dyn std::error::Error>>;
 
-macro_rules! room_fmt {() => {"{:30.30} | {:30.30} | {}"};}
+macro_rules! room_fmt {
+    () => {
+        "{:30.30} | {:30.30} | {}"
+    };
+}
 
 pub async fn login(username: Option<&str>) -> CommandResult {
     let user_id = match username {
