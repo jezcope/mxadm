@@ -12,8 +12,8 @@ TODO: policy on maintenance and contributions
 - [ ] Log out
 - [x] Show login status
 - [ ] Tombstone room
-- [ ] Add room alias
-- [ ] Remove room alias
+- [x] Add room alias
+- [x] Remove room alias
 - [x] List rooms
 - [ ] Filter room list in various ways (esp. Spaces!)
 - [ ] Handle multiple accounts on different homeservers
