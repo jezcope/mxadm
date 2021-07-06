@@ -61,8 +61,7 @@ async fn main() -> Result<()> {
             }
         },
         ("", None) => {
-            let mut out = io::stdout();
-            app.write_long_help(&mut out).unwrap();
+            println!("No subcommand given: see `mxadm help` for usage information");
         }
         (c, _) => {
             todo!("Subcommand '{}' not implemented yet!", c);
