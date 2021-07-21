@@ -8,6 +8,7 @@ license = "GPL-3.0-or-later"
 repository = "https://tildegit.org/petrichor/mxadm"
 homepage = "https://tildegit.org/petrichor/mxadm"
 readme = "README.md"
+exclude = ["envrc.sample", "flake.nix", "flake.lock"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
