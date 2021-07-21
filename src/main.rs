@@ -10,7 +10,7 @@ mod commands;
 mod session;
 
 use anyhow::Result;
-use clap::SubCommand;
+use clap::{Arg, SubCommand};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -22,7 +22,30 @@ async fn main() -> Result<()> {
         )
         .subcommand(SubCommand::with_name("logout").about("ends the current session"))
         .subcommand(SubCommand::with_name("status").about("displays current session status"))
-        .subcommand(SubCommand::with_name("list-rooms").about("lists rooms available to the user"))
+        .subcommand(
+            SubCommand::with_name("room")
+                .about("room subcommands")
+                .subcommand(
+                    SubCommand::with_name("list")
+                        .alias("ls")
+                        .about("lists rooms available to the user"),
+                )
+                .subcommand(
+                    SubCommand::with_name("tombstone")
+                        .about("add a tombstone redirecting one room to another")
+                        .args_from_usage(
+                            "<OLD_ROOM_ID>  'The ID of the source room'
+                             <NEW_ROOM_ID>  'The ID of the target room'",
+                        )
+                        .arg(
+                            Arg::with_name("MSG")
+                                .short("m")
+                                .long("message")
+                                .help("The message to display in the old rom")
+                                .default_value("This room has been replaced"),
+                        ),
+                ),
+        )
         .subcommand(
             SubCommand::with_name("alias")
                 .about("alias subcommands")
@@ -45,7 +68,20 @@ async fn main() -> Result<()> {
     match matches.subcommand() {
         ("login", Some(submatches)) => commands::login(submatches.value_of("user")).await?,
         ("status", Some(_)) => commands::status().await?,
-        ("list-rooms", Some(_)) => commands::list_rooms().await?,
+        ("room", Some(room)) => match room.subcommand() {
+            ("list", Some(_)) => commands::list_rooms().await?,
+            ("tombstone", Some(submatches)) => {
+                commands::tombstone_room(
+                    submatches.value_of("OLD_ROOM_ID").unwrap(),
+                    submatches.value_of("NEW_ROOM_ID").unwrap(),
+                    submatches.value_of("MSG").unwrap(),
+                )
+                .await?
+            }
+            (c, _) => {
+                todo!("Subcommand '{}' not implemented yet!", c);
+            }
+        },
         ("alias", Some(alias)) => match alias.subcommand() {
             ("add", Some(submatches)) => {
                 commands::add_alias(

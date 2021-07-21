@@ -1,6 +1,10 @@
 use anyhow::{Context, Result};
 use matrix_sdk::{
-    ruma::{api::client::r0::alias, RoomAliasId, RoomId, UserId},
+    ruma::{
+        api::client::r0::alias,
+        events::{room::tombstone::TombstoneEventContent, AnyStateEventContent},
+        RoomAliasId, RoomId, UserId,
+    },
     Client, Session, SyncSettings,
 };
 use rpassword::prompt_password_stderr;
@@ -105,6 +109,35 @@ pub async fn list_rooms() -> CommandResult {
         );
     }
 
+    Ok(())
+}
+
+pub async fn tombstone_room(old_room_id: &str, new_room_id: &str, msg: &str) -> CommandResult {
+    let old_room_id = RoomId::try_from(old_room_id)
+        .with_context(|| format!("Failed to parse '{}' as room ID", old_room_id))?;
+    let new_room_id = RoomId::try_from(new_room_id)
+        .with_context(|| format!("Failed to parse '{}' as room ID", new_room_id))?;
+    let client = restore_session().await?;
+    let mut sync_settings = SyncSettings::new();
+    if let Some(token) = client.sync_token().await {
+        sync_settings = sync_settings.token(token);
+    }
+
+    print!("Syncing...");
+    io::stderr().flush().unwrap();
+    client
+        .sync_once(sync_settings)
+        .await
+        .context("Sync failed")?;
+    println!(" done");
+
+    if let Some(old_room) = client.get_joined_room(&old_room_id) {
+        let event = TombstoneEventContent::new(msg.to_string(), new_room_id);
+        let content = AnyStateEventContent::RoomTombstone(event);
+        old_room.send_state_event(content, "").await?;
+    } else {
+        println!("Room {} not joined", old_room_id);
+    }
     Ok(())
 }
 

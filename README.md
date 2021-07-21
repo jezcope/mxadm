@@ -9,9 +9,12 @@ TODO: policy on maintenance and contributions
 - [x] Login and store session info
 - [ ] Log out
 - [x] Show login status
-- [ ] Tombstone room
+- [x] Tombstone room
 - [x] Add room alias
 - [x] Remove room alias
+- [ ] Set canonical room alias
+    - [ ] Optionally create alias in one command
+- [ ] Remove canonical room alias
 - [x] List rooms
 - [ ] Filter room list in various ways (esp. Spaces!)
 - [ ] Handle multiple accounts on different homeservers
