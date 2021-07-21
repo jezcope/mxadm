@@ -1,10 +1,12 @@
 [package]
 name = "mxadm"
+description = "A simple CLI interface to basic Matrix room admin tasks"
 version = "0.1.0"
 authors = ["Jez Cope <j.cope@erambler.co.uk>"]
 edition = "2018"
 license = "GPL-3.0-or-later"
 repository = "https://tildegit.org/petrichor/mxadm"
+homepage = "https://tildegit.org/petrichor/mxadm"
 readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -12,8 +14,11 @@ readme = "README.md"
 [dependencies]
 clap = "2.33.3"
 rpassword = "5.0"
-matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk" }
-tokio = { version = "*", features = ["full"] }
+matrix-sdk = "0.3.*"
+ruma-client-api = "0.11.*"
+ruma-events = "0.23.*"
+ruma-identifiers = "0.19.*"
+tokio = { version = "^1.8.2", features = ["full"] }
 serde = "1.0"
 serde-lexpr = "0.1.0"
 directories = "3.0"

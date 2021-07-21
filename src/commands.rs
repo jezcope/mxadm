@@ -1,13 +1,9 @@
 use anyhow::{Context, Result};
-use matrix_sdk::{
-    ruma::{
-        api::client::r0::alias,
-        events::{room::tombstone::TombstoneEventContent, AnyStateEventContent},
-        RoomAliasId, RoomId, UserId,
-    },
-    Client, Session, SyncSettings,
-};
+use matrix_sdk::{Client, Session, SyncSettings};
 use rpassword::prompt_password_stderr;
+use ruma_client_api::r0::alias;
+use ruma_events::{room::tombstone::TombstoneEventContent, AnyStateEventContent};
+use ruma_identifiers::{RoomAliasId, RoomId, UserId};
 use std::convert::TryFrom;
 use std::io::{self, Write};
 
