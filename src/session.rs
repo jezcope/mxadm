@@ -1,7 +1,6 @@
 use anyhow::{Context, Result};
 use directories::ProjectDirs;
 use matrix_sdk::{Client, ClientConfig, Session};
-use serde_lexpr;
 use std::fs::{create_dir_all, File};
 use std::io::ErrorKind;
 
