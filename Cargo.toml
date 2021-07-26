@@ -1,7 +1,7 @@
 [package]
 name = "mxadm"
 description = "A simple CLI interface to basic Matrix room admin tasks"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Jez Cope <j.cope@erambler.co.uk>"]
 edition = "2018"
 license = "GPL-3.0-or-later"
