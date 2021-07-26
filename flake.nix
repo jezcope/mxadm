@@ -8,7 +8,7 @@
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
         devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [ rustup pkgconfig openssl.dev ];
+          buildInputs = with pkgs; [ rustup rustracer pkgconfig openssl.dev ];
         };
       });
 }
