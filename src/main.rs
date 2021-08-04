@@ -18,7 +18,7 @@ async fn main() -> Result<()> {
         .subcommand(
             SubCommand::with_name("login")
                 .about("authenticates and saves the session details")
-                .args_from_usage("-U, --user=[USERNAME] 'Specifies the username to log in with'"),
+                .args_from_usage("-U, --user=[MXID] 'Specifies the Matrix ID (like @you:example.com) to log in with'"),
         )
         .subcommand(SubCommand::with_name("logout").about("ends the current session"))
         .subcommand(SubCommand::with_name("status").about("displays current session status"))
@@ -34,8 +34,8 @@ async fn main() -> Result<()> {
                     SubCommand::with_name("tombstone")
                         .about("add a tombstone redirecting one room to another")
                         .args_from_usage(
-                            "<OLD_ROOM_ID>  'The ID of the source room'
-                             <NEW_ROOM_ID>  'The ID of the target room'",
+                            "<OLD_ROOM_ID>  'The ID (like !aBcD:example.com) of the source room'
+                             <NEW_ROOM_ID>  'The ID (like !pQrS:example.com) of the target room'",
                         )
                         .arg(
                             Arg::with_name("MSG")
@@ -53,14 +53,14 @@ async fn main() -> Result<()> {
                     SubCommand::with_name("add")
                         .about("adds an alias to a room")
                         .args_from_usage(
-                            "<ROOM_ID>  'The ID of the room to alias'
-                             <ALIAS>    'The new alias to add'",
+                            "<ROOM_ID>  'The ID (like !aBcD:example.com) of the room to alias'
+                             <ALIAS>    'The new alias (like #alias:example.com) to add'",
                         ),
                 )
                 .subcommand(
                     SubCommand::with_name("delete")
                         .about("deletes an existing alias")
-                        .args_from_usage("<ALIAS>    'The alias to delete'"),
+                        .args_from_usage("<ALIAS>    'The alias (like #alias:example.com) to delete'"),
                 ),
         );
     let matches = app.get_matches();
